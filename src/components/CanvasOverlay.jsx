@@ -104,7 +104,7 @@ export default function CanvasOverlay({ width, height, scale, tool, color, strok
     <canvas
       ref={canvasRef}
       className="canvas"
-      style={{ width, height, pointerEvents: tool === Tool.SELECT ? 'none' : 'auto' }}
+      style={{ width, height}}
       onMouseDown={onDown}
       onMouseMove={onMove}
       onMouseUp={onUp}
