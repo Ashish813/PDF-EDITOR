@@ -14,6 +14,7 @@ export default function PdfViewer({ state }) {
   const { pdfBytes, pageIndex, setPageCount, scale, pageAnn, tool, color, stroke, opacity, push } = state;
   const [pageSize, setPageSize] = useState({ width: 0, height: 0 });
   const wrapRef = useRef(null);
+  const [pageRef, setPageRef] = useState(null);
 
   const file = useMemo(() => {
     if (!pdfBytes) return null;
@@ -33,8 +34,15 @@ export default function PdfViewer({ state }) {
               pageNumber={pageIndex + 1}
               renderAnnotationLayer={false}
               renderTextLayer={false}
-              onRenderSuccess={(p) => setPageSize({ width: p.originalWidth, height: p.originalHeight })}
+              onRenderSuccess={(p) =>
+                setPageSize({ width: p.originalWidth, height: p.originalHeight })
+              }
+              onLoadSuccess={(page) => {
+                console.log("PDF.js Page loaded ✅", page);
+                setPageRef(page); // 🔥 store page object in state
+              }}
             />
+
           </Document>
           {pageSize.width > 0 && (
             <CanvasOverlay
@@ -47,6 +55,7 @@ export default function PdfViewer({ state }) {
               opacity={opacity}
               items={pageAnn}
               onAdd={push}
+              pageRef={pageRef}
             />
           )}
         </div>
